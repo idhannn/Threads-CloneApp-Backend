@@ -1,4 +1,5 @@
 const Post = require("../models/postModel");
+const Notifications = require("../models/notifModel");
 const { errorHandler, Success } = require("../utils/responseHandler");
 
 const getAllPost = async (req, res) => {
@@ -25,8 +26,8 @@ const getPostById = async (req, res) => {
 
 const createPost = async (req, res) => {
     try {
-        const { username, caption, image } = req.body;
-
+        const { caption, image } = req.body;
+        const username = req.user.username;
         if (!username || !caption) {
             return errorHandler(res, 400, 'Isi Semua Input!');
         }
@@ -41,15 +42,27 @@ const createPost = async (req, res) => {
 
 const incrementLike = async (req, res) => {
     try {
-        const id = req.params.postId;
+        const postId = req.params.postId;
 
-        if (!id) {
+        const userWhoPosted = req.query.username;
+        const sourceUsername = req.user.username;
+
+        if (!postId || !sourceUsername || !userWhoPosted) {
             return errorHandler(res, 404, 'Postingan Tidak Ditemukan!');
         }
 
-        const increaseLike = await Post.findByIdAndUpdate(id, {
+        if (userWhoPosted !== sourceUsername) {
+            const createNotif = await Notifications.create({
+                postId,
+                username: sourceUsername,
+                notifType: 'like',
+                message: `${sourceUsername} Menyukai Postinganmu!`,
+            })
+        }
+
+        const increaseLike = await Post.findByIdAndUpdate(postId, {
             $inc: { likes: 1 },
-        })
+        });
 
         const like = increaseLike.likes;
 
@@ -59,27 +72,9 @@ const incrementLike = async (req, res) => {
     }
 }
 
-const createComment = async (req, res) => {
-    try {
-        const id = req.params.postId;
-        const data = req.body.comment;
-
-        if (!id || !data) {
-            return errorHandler(res, 400, 'Data Kurang Lengkap!');
-        }
-
-        const comment = await Post.findByIdAndUpdate(id, { $push: { comments: data } });
-
-        return Success(res, 200, 'Komentar Ditambahkan', { comment });
-    } catch (error) {
-        return errorHandler(res, 500, error.message);
-    }
-}
-
 module.exports = {
     createPost,
     incrementLike,
-    createComment,
     getAllPost,
     getPostById
 }

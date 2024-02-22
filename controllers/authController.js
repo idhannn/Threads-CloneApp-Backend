@@ -20,7 +20,7 @@ const signUp = async (req, res) => {
             return errorHandler(res, 400, existingUsername ? 'Username Sudah Terdaftar' : 'Email Sudah Terdaftar');
 
         }
-        const newUser = await User.create({ username, email, password: hashPassword });
+        const newUser = await User.create({ username, email, password: hashPassword, image: 'https://res.cloudinary.com/dwfwqx75z/image/upload/v1708563877/socialapps/x9idyfpnhd4lmcn91z4x.jpg' });
 
         const { password: pass, ...rest } = newUser._doc;
 
@@ -32,13 +32,15 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { identifier, password } = req.body;
 
-        if (!email || !password) {
+        if (!identifier || !password) {
             return errorHandler(res, 400, 'Isi Semua Input!');
         }
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            $or: [{ email: identifier }, { username: identifier }]
+        });
 
         if (!existingUser) {
             return errorHandler(res, 404, 'User Tidak Terdaftar');
@@ -51,7 +53,8 @@ const signIn = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: existingUser._id, email: existingUser.email }, process.env.JWT_SECRET_KEY
+            { id: existingUser._id, email: existingUser.email, username: existingUser.username, image: existingUser.image },
+            process.env.JWT_SECRET_KEY
         )
 
         const { password: pass, ...rest } = existingUser._doc;

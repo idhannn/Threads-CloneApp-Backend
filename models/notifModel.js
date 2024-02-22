@@ -1,28 +1,24 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const notifSchema = new mongoose.Schema({
+    postId: {
+        type: String,
+        required: true,
+    },
     username: {
         type: String,
         required: true,
-        unique: true,
-
     },
-    email: {
+    message: {
         type: String,
         required: true,
-        unique: true,
     },
-    password: {
+    notifType: {
         type: String,
         required: true,
-        min: 8
-    },
-    image: {
-        type: String,
-        required: true
     }
 }, { timestamps: true });
 
-const User = mongoose.model('User', userSchema);
+const Notifications = mongoose.model('Notifications', notifSchema);
 
-module.exports = User;
+module.exports = Notifications;

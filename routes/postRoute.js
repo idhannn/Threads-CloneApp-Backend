@@ -1,11 +1,15 @@
 const express = require('express');
-const { createPost, incrementLike, createComment, getAllPost, getPostById } = require('../controllers/postController');
+const { createPost, incrementLike, getAllPost, getPostById } = require('../controllers/postController');
+const { getNotifications } = require('../controllers/NotifController');
+const { createComment } = require('../controllers/commentController');
 const router = express.Router();
 
 router.post('/create', createPost);
 router.get('/list', getAllPost);
 router.get('/:id', getPostById);
 router.patch('/like/:postId', incrementLike);
-router.patch('/comment/:postId', createComment);
+
+router.post('/comment/create', createComment);
+// router.get('/notifications/:username', getNotifications);
 
 module.exports = router;

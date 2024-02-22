@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema({
         required: false,
 
     },
-    whoLikesIt: {
+    replies: {
         type: Array,
         default: [],
     },
@@ -23,10 +23,6 @@ const postSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    comments: {
-        type: Array,
-        default: [],
-    }
 }, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
