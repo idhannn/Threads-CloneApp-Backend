@@ -1,6 +1,6 @@
 const express = require('express');
 const { createPost, incrementLike, getAllPost, getPostById } = require('../controllers/postController');
-const { getNotifications } = require('../controllers/NotifController');
+const { getNotifications } = require('../controllers/notifController');
 const { createComment } = require('../controllers/commentController');
 const router = express.Router();
 

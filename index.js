@@ -5,6 +5,7 @@ const database = require('./config/database');
 const authRoute = require('./routes/authRoute');
 const userRoute = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
+const notifRoute = require('./routes/notifRoute');
 const verifyToken = require('./middlewares/verifyToken');
 
 const allowedOrigin = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN];
@@ -28,6 +29,7 @@ const PORT = process.env.PORT || 5000;
 app.use('/auth', authRoute);
 app.use('/user', userRoute);
 app.use('/post', verifyToken, postRoute);
+app.use('/activity', verifyToken, notifRoute);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

@@ -43,7 +43,6 @@ const createPost = async (req, res) => {
 const incrementLike = async (req, res) => {
     try {
         const postId = req.params.postId;
-
         const userWhoPosted = req.query.username;
         const sourceUsername = req.user.username;
 
@@ -53,6 +52,7 @@ const incrementLike = async (req, res) => {
 
         if (userWhoPosted !== sourceUsername) {
             const createNotif = await Notifications.create({
+                userWhoPosted,
                 postId,
                 username: sourceUsername,
                 notifType: 'like',

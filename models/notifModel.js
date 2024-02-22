@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const notifSchema = new mongoose.Schema({
+    userWhoPosted: {
+        type: String,
+        required: true,
+    },
     postId: {
         type: String,
         required: true,

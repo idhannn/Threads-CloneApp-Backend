@@ -40,6 +40,7 @@ const createComment = async (req, res) => {
 
         if (userWhoPosted !== username) {
             const createNotif = await Notifications.create({
+                userWhoPosted,
                 postId,
                 username,
                 notifType: 'comment',
