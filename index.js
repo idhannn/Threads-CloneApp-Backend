@@ -27,7 +27,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use('/auth', authRoute);
 app.use('/user', userRoute);
-app.use('/post', verifyToken, postRoute);
+app.use('/post', postRoute);
 // app.use('/activity', verifyToken, notifRoute);
 
 app.listen(PORT, () => {
