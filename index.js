@@ -27,7 +27,7 @@ app.use(
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
-// app.use('/auth', authRoute);
+app.use("/auth", authRoute);
 app.use("/user", userRoute);
 app.use("/post", postRoute);
 app.use("/activity", notifRoute);
